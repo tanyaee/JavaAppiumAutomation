@@ -157,11 +157,77 @@ public class FirstTest {
                 "Cannot find 'Skip' button",
                 3
         );
+
         assertElementHasText(
                 By.xpath("//*[@text='Search Wikipedia']"),
                 "Search Wikipedia",
-                "'Search' field contains unexpected hint")
-        ;
+                "'Search' field contains unexpected hint"
+        );
+
+    }
+
+
+    @Test
+    public void testCheckSearchResultAndCancelSearch()
+    {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find 'Skip' button",
+                3
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                3
+        );
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                10,
+                "OOP"
+        );
+
+        assertElementHasText(
+                By.xpath("//*[@text='OOP']"),
+                "OOP",
+                "Article with provided title not found"
+        );
+
+        assertElementHasText(
+                By.xpath("//*[@text='Oops!... I Did It Again (album)']"),
+                "Oops!... I Did It Again (album)",
+                "Article with provided title not found"
+        );
+
+        assertElementHasText(
+                By.xpath("//*[@text='Oopiri']"),
+                "Oopiri",
+                "Article with provided title not found"
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find close icon",
+                5
+        );
+
+        waitForElementNotPresent(
+                By.xpath("//*[@text='OOP']"),
+                "Search result is still shown",
+                5
+        );
+        waitForElementNotPresent(
+                By.xpath("//*[@text='Oopiri']"),
+                "Search result is still shown",
+                5
+        );
+        waitForElementNotPresent(
+                By.xpath("//*[@text='Oops!... I Did It Again (album)']"),
+                "Search result is still shown",
+                5
+        );
 
     }
 
