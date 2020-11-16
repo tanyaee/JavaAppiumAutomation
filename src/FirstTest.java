@@ -147,6 +147,21 @@ public class FirstTest {
                 article_title
         );
 
+    }
+
+    @Test
+    public void testSearchFieldHint()
+    {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find 'Skip' button",
+                3
+        );
+        assertElementHasText(
+                By.xpath("//*[@text='Search Wikipedia']"),
+                "Search Wikipedia",
+                "'Search' field contains unexpected hint")
+        ;
 
     }
 
@@ -190,6 +205,17 @@ public class FirstTest {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.clear();
         return element;
+    }
+
+    private void assertElementHasText(By by, String expected_text, String error_message){
+        WebElement element = waitForElementPresent(by, error_message, 5);
+        String actual_text = element.getAttribute("text");
+        Assert.assertEquals(
+                "We see unexpected text",
+                expected_text,
+                actual_text
+
+        );
     }
 
 }
