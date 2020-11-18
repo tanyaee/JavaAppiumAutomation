@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest {
     private AppiumDriver driver;
@@ -231,6 +232,50 @@ public class FirstTest {
 
     }
 
+    @Test
+    public void testCheckSearchWordInSearchResponse()
+    {
+
+        String search_query = "OOP";
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find 'Skip' button",
+                3
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                3
+        );
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                10,
+                search_query
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']"),
+                "Search results elements are not found",
+                5
+        );
+
+        List<WebElement> search_result = driver.findElements(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']"));
+
+        for(int i = 0; i < search_result.size(); i++)
+        {
+            assertElementContainsText(
+                    search_result.get(i),
+                    search_query,
+                    "Search response doesn't contain search query"
+            );
+        }
+
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds)
     {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -284,4 +329,15 @@ public class FirstTest {
         );
     }
 
+    private void assertElementContainsText(WebElement element, String expected_text, String error_message){
+        String search_response = element.getAttribute("name").toLowerCase();
+        if (search_response.contains(expected_text.toLowerCase())){
+            Assert.assertTrue(true);
+        }
+        else
+        {
+            Assert.fail(error_message);
+        }
+
+    }
 }
