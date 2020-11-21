@@ -1,10 +1,12 @@
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -276,6 +278,51 @@ public class FirstTest {
 
     }
 
+    @Test
+    public void testSwipeArticle(){
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find 'Skip' button",
+                3
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                3
+        );
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                3,
+                "Appium"
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Appium']"),
+                "Cannot find 'Appium' topic searching by 'Appium'",
+                15
+        );
+
+        waitForElementPresent(
+                By.xpath("(//android.view.View[@content-desc=\"Appium\"])[1]"),
+                "Cannot find article title",
+                15
+        );
+
+
+
+         swipeUpToFindElement(
+                 By.xpath("//*[@resource-id='pcs-footer-container-legal']//*[@content-desc='View article in browser']"),
+                 //By.id("pcs-footer-container-legal"),
+                 "Cannot find the end of the article",
+                 5
+         );
+
+
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds)
     {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -338,6 +385,46 @@ public class FirstTest {
         {
             Assert.fail(error_message);
         }
+
+    }
+
+    protected void swipeUp(int timeOfSwipe)
+    {
+        TouchAction action = new TouchAction(driver);
+        Dimension size = driver.manage().window().getSize();
+        int x = size.width/2;
+        int start_y = (int) (size.height * 0.8);
+        int end_y = (int) (size.height * 0.2);
+        action.press(x, start_y).waitAction(timeOfSwipe).moveTo(x, end_y).release().perform();
+
+
+    }
+
+    protected void swipeUpQuick(){
+        swipeUp(200);
+    }
+
+    protected void swipeUpToFindElement(By by, String error_message, int max_swipes)
+    {
+        int already_swiped = 0;
+
+        while(driver.findElements(by).size() == 0)
+        {
+            if (already_swiped > max_swipes){
+                waitForElementPresent(by, "Cannot find element by swiping up. \n" + error_message, 0);
+                return;
+            }
+            else
+            {
+                swipeUpQuick();
+                ++ already_swiped;
+                System.out.println("already_swiped = " + already_swiped);
+            }
+
+
+
+        }
+
 
     }
 }
