@@ -1,6 +1,7 @@
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.android.AndroidKeyCode;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -320,7 +321,123 @@ public class FirstTest {
                  5
          );
 
+         waitForElementAndClick(
+                 By.xpath("//*[@resource-id='pcs-footer-container-legal']//*[@content-desc='View article in browser']"),
+                 "no element",
+                 2
+         );
 
+
+
+    }
+
+    @Test
+    public void testSaveFirstArticleToMyList()
+    {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+                "Cannot find 'Skip' button",
+                3
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                3
+        );
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                10,
+                "Java"
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "Cannot find 'Java (programming language)' topic searching by 'Java'",
+                15
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[@content-desc=\"Java (programming language)\"]"),
+                "Cannot find article subtitle",
+                15
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/article_menu_bookmark"),
+                "Cannot find button to save article",
+                5
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/snackbar_action"),
+                "'Add to list' button not found",
+                5
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/onboarding_button"),
+                "'Got it' button not found",
+                5
+        );
+
+        String name_of_folder = "Learning programming";
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/text_input"),
+                "Cannot find input field for entering the folder name",
+                5,
+                name_of_folder
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='OK']"),
+                "Cannot tap 'OK' button on the pop-up window",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@content-desc='Navigate up']"),
+                "Cannot find 'Back' arrow",
+                5
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find close icon",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id=\"org.wikipedia:id/search_toolbar\"]/android.widget.ImageButton"),
+                "Cannot find back button on the Search field",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@content-desc=\"My lists\"]"),
+                "My lists are not found in navigation bar",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='" + name_of_folder + "']"),
+                "Saved articles folder not found",
+                5
+        );
+
+        swipeElementToLeft(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "Cannot find saved article"
+        );
+
+        waitForElementNotPresent(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "Cannot delete saved article",
+                5
+        );
     }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds)
@@ -332,6 +449,16 @@ public class FirstTest {
         );
 
     }
+
+    public WebElement waitForElementDisplayed(By by, String error_message, long timeoutInSeconds)
+    {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + "\n");
+        return wait.until(
+                ExpectedConditions.visibilityOfElementLocated(by)
+        );
+    }
+
 
     private WebElement waitForElementAndClick(By by, String errr_message, long timeoutInSeconds){
         WebElement element = waitForElementPresent(by, errr_message, timeoutInSeconds);
@@ -395,7 +522,12 @@ public class FirstTest {
         int x = size.width/2;
         int start_y = (int) (size.height * 0.8);
         int end_y = (int) (size.height * 0.2);
-        action.press(x, start_y).waitAction(timeOfSwipe).moveTo(x, end_y).release().perform();
+        action
+                .press(x, start_y)
+                .waitAction(timeOfSwipe)
+                .moveTo(x, end_y)
+                .release()
+                .perform();
 
 
     }
@@ -407,9 +539,47 @@ public class FirstTest {
     protected void swipeUpToFindElement(By by, String error_message, int max_swipes)
     {
         int already_swiped = 0;
+//
+//        while(driver.findElements(by).size() == 0)
+//        {
+//            if (already_swiped > max_swipes){
+//                waitForElementPresent(by, "Cannot find element by swiping up. \n" + error_message, 0);
+//                return;
+//            }
+//            else
+//            {
+//                swipeUpQuick();
+//                ++ already_swiped;
+//                System.out.println("already_swiped = " + already_swiped);
+//            }
+//
+//
+//        }
+//
+//        while (!waitForElementDisplayed(by, "Scroll to element not found", 1).isEnabled())
+//        {
+//            System.out.println("inside the While");
+//            if (already_swiped > max_swipes){
+//                waitForElementPresent(by, "Cannot find element by swiping up. \n" + error_message, 0);
+//                return;
+//            }
+//            else
+//            {
+//                swipeUpQuick();
+//                ++ already_swiped;
+//                System.out.println("already_swiped = " + already_swiped);
+//            }
+//
+//        }
 
-        while(driver.findElements(by).size() == 0)
+        System.out.println("isSelected() " + waitForElementPresent(by, "Scroll to element not found", 1).isSelected());
+        System.out.println("isDisplayed() "+ waitForElementPresent(by, "Scroll to element not found", 1).isDisplayed());
+        System.out.println("isEnabled() " + waitForElementPresent(by, "Scroll to element not found", 1).isEnabled());
+
+
+        while (!waitForElementPresent(by, "Scroll to element not found", 1).isSelected())
         {
+            System.out.println("inside the While");
             if (already_swiped > max_swipes){
                 waitForElementPresent(by, "Cannot find element by swiping up. \n" + error_message, 0);
                 return;
@@ -421,10 +591,30 @@ public class FirstTest {
                 System.out.println("already_swiped = " + already_swiped);
             }
 
-
-
         }
+    }
 
+    protected void swipeElementToLeft(By by, String error_message)
+    {
+        WebElement element = waitForElementPresent(
+                by,
+                error_message,
+                10
+        );
 
+        int left_x = element.getLocation().getX();
+        int right_x = left_x + element.getSize().getWidth();
+        int upper_y = element.getLocation().getY();
+        int lower_y = upper_y + element.getSize().getHeight();
+        int middle_y = (upper_y + lower_y) / 2;
+
+        TouchAction action = new TouchAction(driver);
+
+        action
+                .press(right_x, middle_y)
+                .waitAction(300)
+                .moveTo(left_x, middle_y)
+                .release()
+                .perform();
     }
 }
