@@ -217,11 +217,11 @@ public class FirstTest {
 
         String search_query = "OOP";
 
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
-                "Cannot find 'Skip' button",
-                3
-        );
+//        waitForElementAndClick(
+//                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+//                "Cannot find 'Skip' button",
+//                3
+//        );
 
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
@@ -384,6 +384,43 @@ public class FirstTest {
         );
     }
 
+
+    @Test
+    public void testAmountOfNotEmptySearch()
+    {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                3
+        );
+
+        String search_line = "Linkin park discography";
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                3,
+                search_line
+        );
+
+        String search_result_locator = "//*[@resource-id=\"org.wikipedia:id/search_results_list\"]/*[@resource-id=\"org.wikipedia:id/page_list_item_container\"]";
+
+        waitForElementPresent(
+                By.xpath(search_result_locator),
+                "Cannot find anythyng by the request" + search_line,
+                15
+        );
+
+        int amount_of_search_elements = getAmountOfElements(
+                By.xpath(search_result_locator)
+        );
+
+        Assert.assertTrue(
+                "We found too few results",
+                amount_of_search_elements > 0
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -392,6 +429,7 @@ public class FirstTest {
         );
 
     }
+
 
     public WebElement waitForElementDisplayed(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -514,5 +552,12 @@ public class FirstTest {
                 .moveTo(left_x, middle_y)
                 .release()
                 .perform();
+    }
+
+    private int getAmountOfElements(By by)
+    {
+
+        List elements = driver.findElements(by);
+        return elements.size();
     }
 }
