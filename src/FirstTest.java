@@ -717,6 +717,37 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testAssertTitlePresent(){
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                3
+        );
+
+        String search_line = "Appium";
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                10,
+                search_line
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id=\"org.wikipedia:id/page_list_item_title\"][@text='Appium']"),
+                "Cannot find 'Appium' topic searching by "+ search_line,
+                15
+        );
+        
+
+        assertElementPresent(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Title is missed"
+        );
+
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -870,5 +901,14 @@ public class FirstTest {
     {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         return element.getAttribute(attribute);
+    }
+
+    private void assertElementPresent(By by, String error_message)
+    {
+        int amount_of_elements = getAmountOfElements(by);
+        if (amount_of_elements < 1){
+            String default_message = "An element '" + by.toString() + "' supposed to be not present";
+            throw new AssertionError(default_message + " " + error_message);
+        }
     }
 }
