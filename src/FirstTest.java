@@ -1,11 +1,7 @@
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidKeyCode;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ScreenOrientation;
@@ -36,8 +32,12 @@ public class FirstTest {
 
     @After
     public void tearDown() {
+        driver.rotate(ScreenOrientation.PORTRAIT);
         driver.quit();
     }
+
+
+
 
 
     @Test
@@ -449,6 +449,8 @@ public class FirstTest {
     @Test
     public void testChangeScreenOrientationOnSearchResults()
     {
+        //driver.rotate(ScreenOrientation.PORTRAIT);
+
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
                 "Cannot find 'Search' field",
@@ -467,7 +469,7 @@ public class FirstTest {
         waitForElementAndClick(
                 By.xpath("//*[@text='Java (programming language)']"),
                 "Cannot find 'Java (programming language)' topic searching by" + search_line,
-                15
+                5
         );
 
 
@@ -475,7 +477,7 @@ public class FirstTest {
                 By.id("org.wikipedia:id/view_page_title_text"),
                 "text",
                 "Cannot find title of article",
-                15
+                5
         );
 
         driver.rotate(ScreenOrientation.LANDSCAPE);
@@ -508,6 +510,7 @@ public class FirstTest {
                 title_after_second_rotation
         );
     }
+
 
     @Test
     public void testCheckSearchArticleInBackground()
