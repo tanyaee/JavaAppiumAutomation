@@ -534,7 +534,7 @@ public class FirstTest {
                 5,
                 "Java"
         );
-        
+
         waitForElementPresent(
                 By.xpath("//*[@resource-id=\"org.wikipedia:id/page_list_item_container\"]//*[@text=\"Java (programming language)\"]"),
                 "Cannot find article subtitle",
@@ -550,6 +550,171 @@ public class FirstTest {
         );
 
 
+    }
+
+    @Test
+    public void testSaveTwoArticlesToOneFolder()
+    {
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                3
+        );
+
+        String search_line = "Java";
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                10,
+                search_line
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "Cannot find 'Java (programming language)' topic searching by 'Java'",
+                15
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[@text=\"Java (programming language)\"]"),
+                "Cannot find article subtitle",
+                15
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@content-desc='More options']"),
+                "Cannot find hamburger menu button",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//android.widget.LinearLayout[3]"),
+                "'Add to list' button not found",
+                7
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id=\"org.wikipedia:id/onboarding_button\"]"),
+                "'Got it' button not found",
+                7
+        );
+
+        String name_of_folder = "Learning programming";
+
+        waitForElementAndClear(
+                By.id("org.wikipedia:id/text_input"),
+                "Cannot find input field for entering the folder name",
+                5
+        );
+
+        waitForElementAndSendKeys(
+                By.id("org.wikipedia:id/text_input"),
+                "Cannot find input field for entering the folder name",
+                5,
+                name_of_folder
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='OK']"),
+                "Cannot tap 'OK' button on the pop-up window",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@content-desc='Navigate up']"),
+                "Cannot find X button",
+                5
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'Search' field",
+                4
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='"+ search_line +"']"),
+                "Cannot find recent searches button",
+                4
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='JavaScript']"),
+                "Cannot find 'JavaScript' topic searching by 'Java'",
+                15
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[@text=\"JavaScript\"]"),
+                "Cannot find article title",
+                15
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@content-desc='More options']"),
+                "Cannot find hamburger menu button",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='Add to reading list']"),
+                "'Add to list' button not found",
+                7
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='"+ name_of_folder +"']"),
+                "Folder with '"+ name_of_folder + "'name wasn't found",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@content-desc='Navigate up']"),
+                "Cannot find X button",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@content-desc=\"My lists\"]"),
+                "My lists are not found in navigation bar",
+                5
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='" + name_of_folder + "']"),
+                "Saved articles folder not found",
+                5
+        );
+
+        swipeElementToLeft(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "Cannot find saved article"
+        );
+
+        waitForElementNotPresent(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "Cannot delete saved article",
+                5
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[@text=\"JavaScript\"]"),
+                "Cannot find article title",
+                15
+        );
+
+        waitForElementAndClick(
+                By.xpath("//*[@text='JavaScript']"),
+                "'JavaScript' article not found",
+                3
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[@text=\"JavaScript\"]"),
+                "Cannot find article title",
+                15
+        );
     }
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
