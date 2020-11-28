@@ -93,11 +93,6 @@ public class FirstTest {
 
     @Test
     public void testCompareArticleTitle() {
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
-                "Cannot find 'Skip' button",
-                3
-        );
 
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
@@ -135,11 +130,11 @@ public class FirstTest {
 
     @Test
     public void testSearchFieldHint() {
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
-                "Cannot find 'Skip' button",
-                3
-        );
+//        waitForElementAndClick(
+//                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
+//                "Cannot find 'Skip' button",
+//                3
+//        );
 
         assertElementHasText(
                 By.xpath("//*[@text='Search Wikipedia']"),
@@ -152,11 +147,6 @@ public class FirstTest {
 
     @Test
     public void testCheckSearchResultAndCancelSearch() {
-        waitForElementAndClick(
-                By.id("org.wikipedia:id/fragment_onboarding_skip_button"),
-                "Cannot find 'Skip' button",
-                3
-        );
 
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_container"),
@@ -739,7 +729,7 @@ public class FirstTest {
                 "Cannot find 'Appium' topic searching by "+ search_line,
                 15
         );
-        
+
 
         assertElementPresent(
                 By.id("org.wikipedia:id/view_page_title_text"),
