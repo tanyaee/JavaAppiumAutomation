@@ -30,7 +30,7 @@ public class MyListsPageObject extends MainPageObject {
         this.waitForElementAndClick(
                 By.xpath(folder_name_xpath),
                 "Cannot find folder by name " + name_of_folder,
-                8
+                10
         );
     }
     public void waitToArticleToAppear(String article_title)
@@ -64,4 +64,14 @@ public class MyListsPageObject extends MainPageObject {
 
     }
 
+    public void openArticle(String article_title)
+    {
+        String article_xpath = getSavedArticleXpathByTitle(article_title);
+
+        this.waitForElementAndClick(
+                By.xpath(article_xpath),
+                "'" + article_title + "' article not found",
+                3
+        );
+    }
 }

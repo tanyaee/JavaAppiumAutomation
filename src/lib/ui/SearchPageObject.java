@@ -2,6 +2,9 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class SearchPageObject extends MainPageObject {
 
@@ -11,7 +14,9 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id=\"org.wikipedia:id/search_results_list\"]/*[@resource-id=\"org.wikipedia:id/page_list_item_container\"]",
-            SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
+            SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
+            SEARCH_PREVIOUS_SEARCH_REQUEST_TPL = "//*[@text='{SUBSTRING}']",
+            SEARCH_RESULT_CONTAINER = "//*[@resource-id='org.wikipedia:id/page_list_item_title']";
 
     public SearchPageObject(AppiumDriver driver)
     {
@@ -23,6 +28,11 @@ public class SearchPageObject extends MainPageObject {
     {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
     }
+    private static String getSearchPreviousSearchRequest(String search_line)
+    {
+        return SEARCH_PREVIOUS_SEARCH_REQUEST_TPL.replace("{SUBSTRING}", search_line);
+    }
+
     /* TEMPLATE METHODS */
 
     public void initSearchInput()
@@ -82,6 +92,14 @@ public class SearchPageObject extends MainPageObject {
         return this.getAmountOfElements(By.xpath(SEARCH_RESULT_ELEMENT));
     }
 
+    public void waitForSearchFieldHint(String expected_hint)
+    {
+        this.assertElementHasText(
+                By.xpath(SEARCH_INIT_ELEMENT),
+                expected_hint,
+                "'Search' field contains unexpected hint"
+        );
+    }
     public void waitForEmptyResultLabel()
     {
         this.waitForElementPresent(
@@ -91,9 +109,48 @@ public class SearchPageObject extends MainPageObject {
         );
     }
 
-
     public void assertThereIsNoResultOfSearch()
     {
         this.assertElementNotPresent(By.xpath(SEARCH_RESULT_ELEMENT), "We supposed not to find any results");
+    }
+
+    public void waitForPreviousSearchesButtonAndClick(String search_line)
+    {
+        String previous_searches_xpath = getSearchPreviousSearchRequest(search_line);
+        this.waitForElementAndClick(
+                By.xpath(previous_searches_xpath),
+                "Cannot find recent searches button",
+                4
+        );
+    }
+
+    public void checkSearchResultsByText(String article_title)
+    {
+        String article_title_xpath = getResultSearchElement(article_title);
+        this.assertElementHasText(
+                By.xpath(article_title_xpath),
+                article_title,
+                "Article with '" + article_title + "' title not found"
+        );
+    }
+
+    public void checkSearchResultContainsSearchRequest(String search_query)
+    {
+
+        this.waitForElementPresent(
+                By.xpath(SEARCH_RESULT_CONTAINER),
+                "Search results elements are not found",
+                5
+        );
+
+        List<WebElement> search_result = driver.findElements(By.xpath(SEARCH_RESULT_CONTAINER));
+
+        for (int i = 0; i < search_result.size(); i++) {
+            this.assertElementContainsText(
+                    search_result.get(i),
+                    search_query,
+                    "Search response doesn't contain search query"
+            );
+        }
     }
 }

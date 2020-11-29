@@ -4,6 +4,7 @@ import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.SearchPageObject;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 public class ArticleTests extends CoreTestCase {
     @Test
@@ -37,6 +38,22 @@ public class ArticleTests extends CoreTestCase {
         ArticlePageObject ArticlePageObject =  new ArticlePageObject(driver);
         ArticlePageObject.waitForTitleElement();
         ArticlePageObject.swipeToFooter();
+
+    }
+
+
+    @Test
+    public void testAssertTitlePresent(){
+
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+
+        SearchPageObject.initSearchInput();
+        String search_line = "Appium";
+        SearchPageObject.typeSearchLine(search_line);
+        SearchPageObject.clickByArticleWithSubstring(search_line);
+        ArticlePageObject ArticlePageObject =  new ArticlePageObject(driver);
+        ArticlePageObject.waitForTitleElement();
+        ArticlePageObject.checkArticleTitlePresent(search_line);
 
     }
 }
