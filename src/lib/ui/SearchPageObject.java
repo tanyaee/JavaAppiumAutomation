@@ -28,12 +28,21 @@ public class SearchPageObject extends MainPageObject {
     {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
     }
+
     private static String getSearchPreviousSearchRequest(String search_line)
     {
         return SEARCH_PREVIOUS_SEARCH_REQUEST_TPL.replace("{SUBSTRING}", search_line);
     }
 
     /* TEMPLATE METHODS */
+
+    public void waitForElementByTitleAndDescription(String title, String description)
+    {
+        String search_result_title_xpath = getResultSearchElement(title);
+        this.waitForElementPresent(By.xpath(search_result_title_xpath), "Cannot find search result with title " + title,5);
+        String search_result_description_xpath = getResultSearchElement(description);
+        this.waitForElementPresent(By.xpath(search_result_description_xpath), "Cannot find search result with description " + description,5);
+    }
 
     public void initSearchInput()
     {

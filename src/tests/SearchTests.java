@@ -89,4 +89,17 @@ public class SearchTests extends CoreTestCase {
 
     }
 
+    @Test
+    public void testCheckSearchResultsByTitleAnsDescription() {
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("OOP");
+        SearchPageObject.waitForElementByTitleAndDescription("OOP", "Wikimedia disambiguation page");
+        SearchPageObject.waitForElementByTitleAndDescription("Oops!... I Did It Again (album)", "2000 studio album by Britney Spears");
+        SearchPageObject.waitForElementByTitleAndDescription("Oopiri", "2016 film by Vamsi Paidipally");
+
+    }
+
+
 }
