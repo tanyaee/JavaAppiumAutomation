@@ -30,7 +30,7 @@ public class MyListsTests extends CoreTestCase {
         MyListsPageObject MyListsPageObject = new MyListsPageObject(driver);
 
         MyListsPageObject.openFolderName(name_of_folder);
-        MyListsPageObject.openFolderName(name_of_folder);
+       // MyListsPageObject.openFolderName(name_of_folder);
         MyListsPageObject.swipeByArticleToDelete(article_title);
     }
 
@@ -67,7 +67,7 @@ public class MyListsTests extends CoreTestCase {
         MyListsPageObject MyListsPageObject = new MyListsPageObject(driver);
 
         MyListsPageObject.openFolderName(name_of_folder);
-        MyListsPageObject.openFolderName(name_of_folder);
+       // MyListsPageObject.openFolderName(name_of_folder);
         MyListsPageObject.swipeByArticleToDelete(first_article_title);
         MyListsPageObject.waitToArticleToDisappear(first_article_title);
         MyListsPageObject.waitToArticleToAppear(second_article_title);
