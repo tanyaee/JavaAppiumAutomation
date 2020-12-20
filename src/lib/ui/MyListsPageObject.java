@@ -1,13 +1,16 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
-import org.openqa.selenium.By;
+import lib.Platform;
+import org.openqa.selenium.WebElement;
 
-public class MyListsPageObject extends MainPageObject {
+abstract public class MyListsPageObject extends MainPageObject {
 
-    public static final String
-        FOLDER_BY_NAME_TPL = "xpath://*[@resource-id='org.wikipedia:id/item_container']//*[@text='{FOLDER_NAME}']",
-        ARTICLE_BY_TITLE_TPL = "xpath://*[@text='{TITLE}']";
+    protected static String
+        FOLDER_BY_NAME_TPL,
+        ARTICLE_BY_TITLE_TPL,
+        SWIPE_ACTION_TO_DELETE,
+        CLOSE_SYNC_YOUR_SAVED_ARTICLES;
 
     public MyListsPageObject(AppiumDriver driver)
     {
@@ -21,6 +24,7 @@ public class MyListsPageObject extends MainPageObject {
 
     private static String getSavedArticleXpathByTitle(String article_title)
     {
+
         return ARTICLE_BY_TITLE_TPL.replace("{TITLE}", article_title);
     }
 
@@ -60,9 +64,14 @@ public class MyListsPageObject extends MainPageObject {
                 article_xpath,
                 "Cannot find saved article"
         );
+        if (Platform.getInstance().isIOS()) {
+             this.waitForElementAndClick(SWIPE_ACTION_TO_DELETE, "Cannot find delete button",4);
+             //this.clickElementToTheRightUpperCorner(article_xpath, "Cannot find element to delete");
+        }
         this.waitToArticleToDisappear(article_title);
 
     }
+
 
     public void openArticle(String article_title)
     {
@@ -73,5 +82,18 @@ public class MyListsPageObject extends MainPageObject {
                 "'" + article_title + "' article not found",
                 3
         );
+    }
+
+    public void closeSyncYourSavedArticles()
+    {
+        this.waitForElementAndClick(CLOSE_SYNC_YOUR_SAVED_ARTICLES, "Cannot find and click close icon by element" + CLOSE_SYNC_YOUR_SAVED_ARTICLES, 3);
+    }
+
+    public void assertArticleContainsText(String article_title)
+    {
+        String article_element_xpath = getSavedArticleXpathByTitle(article_title);
+
+        WebElement element = this.waitForElementPresent(article_element_xpath, "Cannot find saved article eleemt by locator + " + article_element_xpath,2);
+        this.assertElementContainsText(element, article_title, "Cannot find elemant with title " + article_title);
     }
 }

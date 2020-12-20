@@ -3,9 +3,9 @@ package lib.ui;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 
-public class NavigationUi extends MainPageObject {
-    private static final String
-        MY_LISTS_LINK = "xpath://*[@content-desc=\"My lists\"]";
+abstract public class NavigationUi extends MainPageObject {
+    protected static String
+        MY_LISTS_LINK;
 
 
     public NavigationUi(AppiumDriver driver)
