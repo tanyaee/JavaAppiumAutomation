@@ -1,6 +1,7 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Test;
@@ -96,7 +97,14 @@ public class SearchTests extends CoreTestCase {
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("OOP");
-        SearchPageObject.waitForElementByTitleAndDescription("OOP", "Wikimedia disambiguation page");
+        if(Platform.getInstance().isIOS()){
+            SearchPageObject.waitForElementByTitleAndDescription("OOP", "Disambiguation page providing links to topics that could be referred to by the same search term");
+
+        }
+        else {
+            SearchPageObject.waitForElementByTitleAndDescription("OOP", "Wikimedia disambiguation page");
+
+        }
         SearchPageObject.waitForElementByTitleAndDescription("Oops!... I Did It Again (album)", "2000 studio album by Britney Spears");
         SearchPageObject.waitForElementByTitleAndDescription("Oopiri", "2016 film by Vamsi Paidipally");
 

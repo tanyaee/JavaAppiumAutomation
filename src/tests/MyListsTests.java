@@ -126,7 +126,7 @@ public class MyListsTests extends CoreTestCase {
         MyListsPageObject.swipeByArticleToDelete(first_article_title);
         MyListsPageObject.waitToArticleToDisappear(first_article_title);
         MyListsPageObject.assertArticleContainsText(second_article_title);
-        
+
     }
 
 }
